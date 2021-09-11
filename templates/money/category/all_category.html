@@ -1,0 +1,14 @@
+{% extends 'money/base.html' %}
+
+{% block content %}
+
+<h2>Категории</h2>
+
+    <ul>{% for category in categories %}
+        <li><a href="{% url 'view_category'  category.id %}"> {{ category.name }}</a></li>
+    {% endfor %}
+    </ul>
+<br>
+<br>
+    <a href="{% url 'create_category' %}"> Создать новую категорию </a>
+{% endblock %}

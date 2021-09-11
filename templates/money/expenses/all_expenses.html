@@ -1,0 +1,38 @@
+{% extends 'money/base.html' %}
+
+{% block content %}
+
+
+
+<br>
+    {% if expenses %}
+            <h2>Текущие расходы </h2>
+
+        {% include "money/expenses/filters.html" %}
+<table>
+            <tr>
+                <th> Id </th>
+                <th> Value </th>
+                <th> Category </th>
+                <th> description </th>
+                <th> date </th>
+                <th> created </th>
+                <th> user </th>
+            </tr>
+        {% csrf_token %}
+        {% for expense in expenses %}
+
+            <tr>
+                <td><a href="{% url 'view_expense'  expense.id %}">{{ expense.id }}</a></td>
+                <td>{{ expense.value }}</td>
+                <td>{{ expense.category }}</td>
+                <td>{{ expense.description }}</td>
+                <td>{{ expense.date }}</td>
+                <td>{{ expense.user }}</td>
+            </tr>
+
+        {% endfor %}
+        </table>
+    {% endif %}
+<a href="{% url 'create_expense' %}"> Создать новый расход </a>
+{% endblock %}

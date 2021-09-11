@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% block title %} {% endblock %}
+    </title>
+</head>
+<body>
+{% if user.is_authenticated %}
+Logged in as {{ user.username }}
+
+    <form action="{% url 'logout_user' %}" method="POST">
+        {% csrf_token %}
+    <button type="submit">Logout</button>
+    </form>
+
+
+{% else %}
+    <a href="{% url 'signup_user' %}">Sign up</a>
+    <a href="{% url 'login_user' %}">Login</a>
+
+{% endif %}
+<a href="{% url 'all_expenses' %}">Expenses</a>
+<a href="{% url 'all_category' %}">Categories</a>
+<br>
+<br>
+<br>
+
+{% block content %}
+{% endblock %}
+
+</body>
+</html>

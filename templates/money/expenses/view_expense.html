@@ -1,0 +1,45 @@
+{% extends 'money/base.html' %}
+
+{% block content %}
+<br>
+<br>
+<table>
+            <tr>
+                <th> Id </th>
+                <th> Value </th>
+                <th> Category </th>
+                <th> description </th>
+                <th> date </th>
+                <th> created </th>
+                <th> user </th>
+            </tr>
+        {% csrf_token %}
+            <tr>
+                <td>{{ expense.id }}</td>
+                <td>{{ expense.value }}</td>
+                <td>{{ expense.category }}</td>
+                <td>{{ expense.description }}</td>
+                <td>{{ expense.date }}</td>
+                <td>{{ expense.user }}</td>
+            </tr>
+        </table>
+<br>
+<br>
+
+    Чтобы отредактировать заполните форму.
+
+<br>
+<br>
+
+<form method="POST">
+{% csrf_token %}
+{{ form.as_p }}
+<button type="submit"> Создать </button>
+</form>
+
+
+    <form method="POST" action="{% url 'delete_expense' expense.id %}">
+        {% csrf_token %}
+        <button type="submit"> Удалить </button>
+    </form>
+{% endblock %}
