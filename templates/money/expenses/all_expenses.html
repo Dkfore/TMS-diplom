@@ -2,8 +2,9 @@
 
 {% block content %}
 
-
-
+    <h2>Добро пожаловать на страницу расходов.</h2>
+    <p>Если таковых нет, нажмите создать.</p>
+    <a href="{% url 'create_expense' %}"> Создать новый расход </a>
 <br>
     {% if expenses %}
             <h2>Текущие расходы </h2>
@@ -12,27 +13,30 @@
 <table>
             <tr>
                 <th> Id </th>
-                <th> Value </th>
-                <th> Category </th>
-                <th> description </th>
-                <th> date </th>
-                <th> created </th>
-                <th> user </th>
+                <th> Категория </th>
+                <th> Описание </th>
+                <th> Дата </th>
+                <th> Сумма </th>
+
             </tr>
         {% csrf_token %}
         {% for expense in expenses %}
 
             <tr>
                 <td><a href="{% url 'view_expense'  expense.id %}">{{ expense.id }}</a></td>
-                <td>{{ expense.value }}</td>
                 <td>{{ expense.category }}</td>
                 <td>{{ expense.description }}</td>
                 <td>{{ expense.date }}</td>
-                <td>{{ expense.user }}</td>
+                <td>{{ expense.value }}</td>
             </tr>
 
         {% endfor %}
+
         </table>
+        <h1>Конечная сумма затрат: {{ total_count }}</h1>
+
     {% endif %}
-<a href="{% url 'create_expense' %}"> Создать новый расход </a>
+    <img src="data:image/png;base64,{{ data }}"/>
+<br>
+
 {% endblock %}

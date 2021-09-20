@@ -17,6 +17,12 @@ from django.contrib import admin
 from django.urls import path
 from money import views
 
+
+
+from django.conf import settings
+from django.conf.urls.static import static
+
+
 urlpatterns = [
     path('', views.home, name='home'),
     path('admin/', admin.site.urls),
@@ -38,4 +44,11 @@ urlpatterns = [
     path('category/<int:category_pk>', views.view_category, name='view_category'),
     path('category/<int:category_pk>/delete', views.delete_category, name='delete_category'),
 
+    #plan
+    path('plan/', views.plan, name='plan'),
+    path('plan/create', views.create_plan, name='create_plan'),
+    path('plan/<int:plan_pk>', views.view_plan, name='view_plan'),
+    path('plan/<int:plan_pk>/delete', views.delete_plan, name='delete_plan'),
+    path('plan/delete_all', views.delete_all, name='delete_all'),
 ]
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

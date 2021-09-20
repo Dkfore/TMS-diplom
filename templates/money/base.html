@@ -8,21 +8,22 @@
 </head>
 <body>
 {% if user.is_authenticated %}
-Logged in as {{ user.username }}
+Вы вошли как <b> {{ user.username }}</b>
 
     <form action="{% url 'logout_user' %}" method="POST">
         {% csrf_token %}
-    <button type="submit">Logout</button>
+    <button type="submit">Выйти </button>
     </form>
 
 
 {% else %}
-    <a href="{% url 'signup_user' %}">Sign up</a>
-    <a href="{% url 'login_user' %}">Login</a>
+    <a href="{% url 'signup_user' %}">Зарегистрироваться</a>
+    <a href="{% url 'login_user' %}">Войти</a>
 
 {% endif %}
-<a href="{% url 'all_expenses' %}">Expenses</a>
-<a href="{% url 'all_category' %}">Categories</a>
+<a href="{% url 'all_expenses' %}">Расходы</a>
+<a href="{% url 'all_category' %}">Категории</a>
+<a href="{% url 'plan' %}">Планирование расходов</a>
 <br>
 <br>
 <br>

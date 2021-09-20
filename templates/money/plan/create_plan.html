@@ -1,0 +1,16 @@
+{% extends 'money/base.html' %}
+
+{% block content %}
+
+<h2>Создать запланированные расходы.</h2>
+
+
+    <form action="" method="post">
+    {% csrf_token %}
+
+    {{ form }}
+
+    <input type="submit" value="Cохранить" />
+
+</form>
+{% endblock %}

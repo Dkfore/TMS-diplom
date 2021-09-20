@@ -1,0 +1,43 @@
+{% extends 'money/base.html' %}
+
+{% block content %}
+
+<h2>Посмотреть запланированные расходы </h2>
+
+
+{% if plan %}
+            <h3> Ожидаемые траты </h3>
+<table>
+            <tr>
+                <th> Id </th>
+                <th> Название </th>
+                <th> Сумма трат </th>
+            </tr>
+        {% csrf_token %}
+        {% for plan in plan %}
+
+            <tr>
+                <td><a href="{% url 'view_plan'  plan.id %}">{{ plan.id }}</a></td>
+                <td>{{ plan.title }}</td>
+                <td>{{ plan.value }}</td>
+            </tr>
+
+        {% endfor %}
+
+        </table>
+        <h3>Конечная сумма затрат: {{ total_count }}</h3>
+
+    {% endif %}
+
+    <br>
+    <br>
+    <br>
+        <a href="{% url 'create_plan' %}"> Создать новую трату </a>
+    <br>
+    <br>
+    <br>
+    <form method="POST" action="{% url 'delete_all' %}">
+        {% csrf_token %}
+        <button type="submit"> Удалить всё одной кнопкой </button>
+    </form>
+{% endblock %}

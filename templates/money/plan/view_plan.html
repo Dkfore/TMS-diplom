@@ -1,0 +1,19 @@
+{% extends 'money/base.html' %}
+
+{% block content %}
+
+    <h3>Планируемая трата: {{ plan }} </h3>
+
+    Чтобы отредактировать заполните форму.
+
+<form method="POST">
+{% csrf_token %}
+{{ form.as_p }}
+<button type="submit"> Сохранить  </button>
+</form>
+    <br>
+    <form method="POST" action="{% url 'delete_plan' plan.id %}">
+        {% csrf_token %}
+        <button type="submit"> Удалить </button>
+    </form>
+{% endblock %}

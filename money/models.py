@@ -20,3 +20,11 @@ class Expense(models.Model):
 
     def __str__(self):
         return f'Расход {self.value} рублей.'
+
+
+class Plan(models.Model):
+    title = models.CharField(max_length=30)
+    value = models.PositiveIntegerField()
+
+    def __str__(self):
+        return self.title

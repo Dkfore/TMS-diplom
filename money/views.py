@@ -2,10 +2,16 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.db import IntegrityError
-from django.shortcuts import render, redirect, get_object_or_404
-from .forms import ExpenseForm, CategoryForm
-from .models import Expense, Category
+from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
+from .forms import ExpenseForm, CategoryForm, PlanForm
+from .models import Expense, Category, Plan
+from django.contrib.auth.decorators import login_required
+import matplotlib
+from matplotlib import pyplot as plt
+from io import BytesIO
+import base64
 
+matplotlib.use('Agg')
 
 FILTERS_ALL_CATEGORIES_ID = -1
 
@@ -57,6 +63,7 @@ def logout_user(request):
 '''Expense'''
 
 
+@login_required
 def all_expenses(request):
     categories = Category.objects.all()
     content = {
@@ -65,14 +72,50 @@ def all_expenses(request):
             'category_id': FILTERS_ALL_CATEGORIES_ID,
         },
     }
-
     category_id = int(request.GET.get('category_id', FILTERS_ALL_CATEGORIES_ID))
     content['filters']['category_id'] = category_id
-
+    total_count = 0
     if category_id != FILTERS_ALL_CATEGORIES_ID:
-        content['expenses'] = Expense.objects.filter(category__id=category_id)
+        content['expenses'] = Expense.objects.filter(category__id=category_id, user=request.user)
+        for expense in content['expenses']:
+            total_count += expense.value
+
     else:
         content['expenses'] = Expense.objects.filter(user=request.user)
+        for expense in content['expenses']:
+            total_count += expense.value
+
+    content['total_count'] = total_count
+
+    '''graphs'''
+
+    list_category = []
+    for i in list(Category.objects.all()):
+        list_category.append(i.name)
+    values_list = []
+    for category in list_category:
+        values_list1 = Expense.objects.filter(category__name=category, user=request.user)
+        cat_value = 0
+        for cat in values_list1:
+            cat_value += cat.value
+        values_list.append(cat_value)
+    fig1, ax1 = plt.subplots()
+
+    def make_autopct(values_list):
+        def my_autopct(pct):
+            total = sum(values_list)
+            val = int(round(pct * total / 100.0))
+            return '{p:.2f}%  ({v:d} руб)'.format(p=pct, v=val)
+
+        return my_autopct
+
+    ax1.pie(values_list, labels=list_category, autopct=make_autopct(values_list),
+            shadow=True, startangle=90)
+    ax1.axis('equal')
+    buf = BytesIO()
+    plt.savefig(buf, format="png")
+    data = base64.b64encode(buf.getbuffer()).decode("ascii")
+    content['data'] = data
 
     return render(request, 'money/expenses/all_expenses.html', content)
 
@@ -104,7 +147,7 @@ def view_expense(request, expense_pk):
             return redirect('all_expenses')
         except ValueError:
             return render(request, 'money/expenses/create_expense.html',
-                          {'expense': 'expense', 'form': ExpenseForm(), 'error': 'Неверные данные'})
+                          {'expense': expense, 'form': ExpenseForm(), 'error': 'Неверные данные'})
 
 
 def delete_expense(request, expense_pk):
@@ -160,3 +203,62 @@ def delete_category(request, category_pk):
     if request.method == 'POST':
         category.delete()
         return redirect('all_category')
+
+
+''' Планирование расходов '''
+
+
+def plan(request):
+    plan = Plan.objects.all()
+    total_count = 0
+    for i in plan:
+        total_count += i.value
+
+    content = {
+        'plan': plan,
+        'total_count': total_count,
+    }
+    return render(request, 'money/plan/plan.html', content)
+
+
+def create_plan(request):
+    if request.method == "GET":
+        return render(request, 'money/plan/create_plan.html', {'form': PlanForm()})
+    else:
+        try:
+            form = PlanForm(request.POST)
+            new_category = form.save(commit=False)
+            new_category.user = request.user
+            new_category.save()
+            return redirect('plan')
+        except ValueError:
+            return render(request, 'money/plan/create_plan.html', {'form': PlanForm(),
+                                                                   'error': 'Неверные данные'})
+
+
+def view_plan(request, plan_pk):
+    plan = get_object_or_404(Plan, pk=plan_pk)
+    if request.method == 'GET':
+        form = PlanForm(instance=plan)
+        return render(request, 'money/plan/view_plan.html', {'plan': plan, 'form': form})
+    else:
+        try:
+            form = PlanForm(request.POST, instance=plan)
+            form.save()
+            return redirect('plan')
+        except ValueError:
+            return render(request, 'money/plan/create_plan.html',
+                          {'plan': 'plan', 'form': CategoryForm(), 'error': 'Неверные данные'})
+
+
+def delete_plan(request, plan_pk):
+    plan = get_object_or_404(Plan, pk=plan_pk)
+    if request.method == 'POST':
+        plan.delete()
+        return redirect('plan')
+
+
+def delete_all(request):
+    plan = Plan.objects.all().delete()
+
+    return render(request, 'money/plan/delete_all.html')
