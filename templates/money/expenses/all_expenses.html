@@ -2,23 +2,44 @@
 
 {% block content %}
 
-    <h2>Добро пожаловать на страницу расходов.</h2>
+    <style>
+         .create a {
+                text-decoration: none;
+                background-color: #e5f6f0;
+                border: 10px;
+                padding: 10px;
+                border-radius: 3px;
+         }
+         .create a:hover {
+             background-color: #f6f4e5;
+             color: darkmagenta;
+         }
+    </style>
+
+    <h3>Добро пожаловать на страницу расходов.</h3>
     <p>Если таковых нет, нажмите создать.</p>
-    <a href="{% url 'create_expense' %}"> Создать новый расход </a>
-<br>
+    <br>
+    <div class="create">
+        <a href="{% url 'create_expense' %}"> Создать новый расход </a>
+    </div>
+    <br>
+    <br>
     {% if expenses %}
-            <h2>Текущие расходы </h2>
+            <h3>Текущие расходы </h3>
 
         {% include "money/expenses/filters.html" %}
-<table>
-            <tr>
+        <br>
+        <table class="table table-striped">
+          <thead>
+           <tr>
                 <th> Id </th>
                 <th> Категория </th>
                 <th> Описание </th>
                 <th> Дата </th>
                 <th> Сумма </th>
-
             </tr>
+          </thead>
+          <tbody>
         {% csrf_token %}
         {% for expense in expenses %}
 
@@ -31,12 +52,32 @@
             </tr>
 
         {% endfor %}
-
+          </tbody>
         </table>
-        <h1>Конечная сумма затрат: {{ total_count }}</h1>
+
+        <h5>Конечная сумма затрат: {{ total_count }}</h5>
 
     {% endif %}
-    <img src="data:image/png;base64,{{ data }}"/>
+
+    <br>
+
+     <div class="accordion accordion-flush" id="accordionFlushExample">
+          <div class="accordion-item">
+                <h2 class="accordion-header" id="flush-headingOne">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                    Чтобы посмотреть диаграмму расходов, кликните.
+                  </button>
+                </h2>
+                <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                  <div class="accordion-body">
+                          <img src="data:image/png;base64,{{ data }}"/>
+                      <br>
+                      Диаграмма показывает категорию расходов, % и сумму.
+                      <code></code> </div>
+                </div>
+          </div>
+     </div>
+
 <br>
 
 {% endblock %}

@@ -3,94 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <!-- CSS only -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
     <title>
         {% block title %} {% endblock %}
     </title>
     <style>
-        html {
-            background-color: #f6f6ed;
-            padding-left: 50px;
-            padding-right: 50px;
-            height: 100%;
-        }
-
         body {
             display: flex;
             flex-direction: column;
         }
 
-       .banner {
-           background-image: url("https://vatikam.s3.amazonaws.com/uploads/portfolio_module/image/135696/portfolio_f32f66c14c.jpg");
-           height: 410px;
-           background-size: cover;
-           border-radius: 5px;
-       }
+        .banner {
+            background-image: url("https://vatikam.s3.amazonaws.com/uploads/portfolio_module/image/135696/portfolio_f32f66c14c.jpg");
+            height: 410px;
+            background-size: cover;
+            border-radius: 5px;
+        }
 
-       .world {
-           color: aliceblue;
-           text-align: right;
-       }
+        .world {
+            color: aliceblue;
+            text-align: right;
+        }
 
-       .world h1 {
-           padding-right: 70px;
-           padding-top: 70px;
-       }
+        .world h1 {
+            padding-right: 70px;
+            padding-top: 70px;
+        }
 
-       .world p {
-           padding-right: 33px;
-       }
+        .world p {
+            padding-right: 33px;
+        }
 
+        .block-content {
+            padding: 30px 20px;
+        }
 
+        button {
+            background-color: #e5f6f0;
+            border-radius: 3px;
+            border: 0;
+            padding: 5px 10px;
+        }
+
+        button:hover {
+            background-color: #f6f4e5;
+        }
     </style>
 </head>
 <body>
-    <!-- JavaScript Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+        crossorigin="anonymous"></script>
 
+<div class="container-xxl">
     <div class="header">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="{% url 'home' %}">MoneyTree</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-     <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #a4e7f8;" >
-      <div class="container-xxl">
-        <a class="navbar-brand" href="#">MoneyTree</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="{% url 'home' %}"> Домашняя </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'all_expenses' %}">Расходы </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'plan' %}">Планирование расходов </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'all_category' %}">Категории </a>
-            </li>
-            <li class="nav-item dropdown">
-                   <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                {% if user.is_authenticated %}
-                Вы вошли как <b> {{ user.username }}</b>
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="{% url 'login_user' %}">Войти</a></li>
-                <li>
-                        <form action="{% url 'logout_user' %}" method="POST">
-                    {% csrf_token %}
-                <button type="submit">Выйти </button>
-                </form>
-                    </li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="{% url 'signup_user' %}">Зарегистрироваться</a></li>
-              </ul>
-            </li>
-          </ul>
-        </div>
-      </div>
-     </nav>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Домашняя</a>
+                        </li>
+
+                        {% if user.is_authenticated %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'all_expenses' %}">Расходы</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'plan' %}">Планирование расходов</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'all_category' %}">Категории</a>
+                            </li>
+                            <li class="nav-item">
+                                <form action="{% url 'logout_user' %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-dark">Выйти</button>
+                                </form>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'signup_user' %}">Зарегистрироваться</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'login_user' %}">Войти</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
     </div>
 
     <div class="banner">
@@ -101,31 +112,20 @@
     </div>
 
 
-{#    <form action="{% url 'logout_user' %}" method="POST">#}
-{#        {% csrf_token %}#}
-{#    <button type="submit">Выйти </button>#}
-{#    </form>#}
-
-
-{% else %}
-    <a href="{% url 'signup_user' %}">Зарегистрироваться</a>
-    <a href="{% url 'login_user' %}">Войти</a>
-
-{% endif %}
-{#<a href="{% url 'all_expenses' %}">Расходы</a>#}
-{#<a href="{% url 'all_category' %}">Категории</a>#}
-{#<a href="{% url 'plan' %}">Планирование расходов</a>#}
-<br>
-<br>
-<br>
     <div class="block-content">
-        <div class="col-8">
-                    {% block content %}
-                    {% endblock %}
-        </div>
-        <div class="col-4">sdcsdcsdc</div>
+        <div class="row">
+            <div class="col-8">
+                {% block content %}
+                {% endblock %}
+            </div>
 
+            <div class="col-4">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/d/df/US_%241_obverse.jpg" alt="dollar"
+                     style="width: 100%;">
+            </div>
+        </div>
     </div>
+</div>
 
 
 </body>

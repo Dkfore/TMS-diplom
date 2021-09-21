@@ -1,14 +1,71 @@
 {% extends 'money/base.html' %}
 
 {% block content %}
+    <style>
+         .create a {
+                text-decoration: none;
+                background-color: #e5f6f0;
+                border: 10px;
+                padding: 10px;
+                border-radius: 3px;
+         }
+         .create a:hover {
+             background-color: #f6f4e5;
+             color: darkmagenta;
+         }
 
-<h2>Категории</h2>
+         .rounded {
+                counter-reset: li;
+                list-style: none;
+                font: 14px "Trebuchet MS", "Lucida Sans";
+                padding: 0;
+                text-shadow: 0 1px 0 rgba(255,255,255,.5);
+                }
+         .rounded a {
+                position: relative;
+                display: block;
+                padding: .4em .4em .4em 2em;
+                margin: .5em 0;
+                background: #DAD2CA;
+                color: #444;
+                text-decoration: none;
+                border-radius: .3em;
+                transition: .3s ease-out;
+                }
+         .rounded a:hover {background: #E9E4E0;}
+         .rounded a:hover:before {transform: rotate(360deg);}
+         .rounded a:before {
+                content: counter(li);
+                counter-increment: li;
+                position: absolute;
+                left: -1.3em;
+                top: 50%;
+                margin-top: -1.3em;
+                background: #8FD4C1;
+                height: 2em;
+                width: 2em;
+                line-height: 2em;
+                border: .3em solid white;
+                text-align: center;
+                font-weight: bold;
+                border-radius: 2em;
+                transition: all .3s ease-out;
+                }
+    </style>
 
-    <ul>{% for category in categories %}
-        <li><a href="{% url 'view_category'  category.id %}"> {{ category.name }}</a></li>
-    {% endfor %}
+<h3>Категории</h3>
+    <br>
+
+    <ul class="rounded">
+        {% for category in categories %}
+            <li><a href="{% url 'view_category'  category.id %}"> {{ category.name }}</a></li>
+        {% endfor %}
     </ul>
+
 <br>
 <br>
-    <a href="{% url 'create_category' %}"> Создать новую категорию </a>
+
+    <div class="create">
+        <a href="{% url 'create_category' %}"> Создать новую категорию </a>
+    </div>
 {% endblock %}

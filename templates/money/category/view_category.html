@@ -12,6 +12,7 @@
 <button type="submit"> Сохранить  </button>
 </form>
 
+    <br>
 
     <form method="POST" action="{% url 'delete_category' category.id %}">
         {% csrf_token %}
