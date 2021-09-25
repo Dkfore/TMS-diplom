@@ -1,5 +1,6 @@
 from django.forms import ModelForm
 from .models import Expense, Category, Plan
+from django.core.exceptions import FieldDoesNotExist
 
 
 class ExpenseForm(ModelForm):

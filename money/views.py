@@ -4,13 +4,16 @@ from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from .forms import ExpenseForm, CategoryForm, PlanForm
-from .models import Expense, Category, Plan
 from django.contrib.auth.decorators import login_required
 import matplotlib
 from matplotlib import pyplot as plt
 from io import BytesIO
 import base64
-
+from money.serializers import ExpenseSerializer, UserSerializer, CategorySerializer
+from money.models import Expense, Category, Plan
+from rest_framework import viewsets
+from rest_framework import permissions
+from django.shortcuts import render
 matplotlib.use('Agg')
 
 FILTERS_ALL_CATEGORIES_ID = -1
@@ -262,3 +265,24 @@ def delete_all(request):
     plan = Plan.objects.all().delete()
 
     return render(request, 'money/plan/delete_all.html')
+
+
+''' API '''
+
+
+class ExpenseViewSet(viewsets.ModelViewSet):
+    queryset = Expense.objects.all()
+    serializer_class = ExpenseSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class CategoryViewSet(viewsets.ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    permission_classes = [permissions.IsAuthenticated]
