@@ -74,6 +74,10 @@
                             <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Домашняя</a>
                         </li>
 
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="http://127.0.0.1:8000/">API</a>
+                        </li>
+
                         {% if user.is_authenticated %}
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'all_expenses' %}">Расходы</a>

@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'money',
     'matplotlib',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

@@ -14,17 +14,20 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from money import views
-
-
-
+from rest_framework import routers
 from django.conf import settings
 from django.conf.urls.static import static
 
 
+router = routers.DefaultRouter()
+router.register(r'expenses', views.ExpenseViewSet)
+router.register(r'user', views.UserViewSet)
+router.register(r'categories', views.CategoryViewSet)
+
 urlpatterns = [
-    path('', views.home, name='home'),
+    path('home', views.home, name='home'),
     path('admin/', admin.site.urls),
     path('all_expenses/', views.all_expenses, name='all_expenses'),
     path('expense/', views.create_expense, name='create_expense'),
@@ -50,5 +53,9 @@ urlpatterns = [
     path('plan/<int:plan_pk>', views.view_plan, name='view_plan'),
     path('plan/<int:plan_pk>/delete', views.delete_plan, name='delete_plan'),
     path('plan/delete_all', views.delete_all, name='delete_all'),
+
+    path('', include(router.urls)),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
+
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
